@@ -1,0 +1,14 @@
+Print operation:
+	In pyhton 2 print is treated as statement
+	In python 3 print is treated as function
+Division operation:
+	In python 2, division of 2 integers results an integer and it rounds up the float value to its' nearest whole value
+	In python 3, division of 3 integers will result the float/int value depending on the original result
+Unicode:
+	In Python 2, implicit str type is ASCII. 
+	In Python 3, implicit str type is Unicode.
+Range:
+	In Python 2, range returns a list i while xrange returns a xrange object.
+	In python 3, range and xrange operation is same and it is same as xrange in python 2.
+
+	
