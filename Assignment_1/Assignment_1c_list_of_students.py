@@ -1,3 +1,7 @@
+#Consider the following scenario. You have a list of students who are attending class "Python" 
+#and another list of students who are attending class "Web Application".
+#Find the list of students who are attending “python” classes but not “Web Application”
+
 #function to create list
 def list1():
     n=eval(input("Student number:")) #takes number of elements in the list
