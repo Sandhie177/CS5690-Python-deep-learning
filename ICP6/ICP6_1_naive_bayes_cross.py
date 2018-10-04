@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB 
 from sklearn import metrics 
 
-iris = datasets.load_iris() 
+iris = datasets.load_digits() 
   
 # store the feature matrix (X) and response vector (y) 
 X = iris.data 
