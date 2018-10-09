@@ -9,7 +9,6 @@
 #h. Extract those sentences and concatenate
 
 #importing libraries
-import re
 import nltk
 
 ##reading a file
@@ -19,8 +18,7 @@ print (file_content)
 words = nltk.word_tokenize(file_content) #tokennizing
 
 print ('\nb) performing lemmatization:')    
-#importing libraries
-from nltk.stem import WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer #importing libraries
 lemmatizer = WordNetLemmatizer() #lemmatization
 
 for w in words:
@@ -28,8 +26,7 @@ for w in words:
 
 #bigram starts   
 print ('\nc) performing Bigram:')
-#importing libraries
-from nltk import ngrams
+from nltk import ngrams #importing libraries
 
 n = 2 #n defines the number of ngrams
 bigrams = ngrams(file_content.split(), n) #splitting with respect to n
@@ -42,14 +39,13 @@ print ('\nd) Calculating Word frequency')
 from itertools import islice
 from collections import Counter
 
-all_count = Counter(zip(words, islice(words, 1, None))) #using counter function to count the bigrams
-
+all_count = Counter(zip(words, islice(words, 1, None))) #using counter to count the bigrams
 print (all_count)
 
 #finding the top five bigrams that have been repeated most
-
 print ('\ne) Finding top 5 bigrams according to repeatation: ')
-most_common = all_count.most_common(5) #using most_common operation to find most repeated bigrams
+most_common = all_count.most_common(5) 
+#using most_common operation to find most repeated bigrams
 print (most_common)
 a = []
 for i in range(0,(len(most_common))): #loop to form a list of most common bigrams

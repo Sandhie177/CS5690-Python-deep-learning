@@ -15,8 +15,9 @@ digits = load_digits()
 
 y=digits.target
 sns.countplot(y)
-plt.show()
 print ("a) Ploting the number of each catergories")
+plt.show()
+
 #print (len(digits.data))
 
 # split the data into training and validation sets
