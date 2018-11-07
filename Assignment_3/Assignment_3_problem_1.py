@@ -1,5 +1,5 @@
+#importing libraries
 from __future__ import print_function
-import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,27 +8,19 @@ from keras import metrics
 from keras import regularizers
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Activation
-from keras.layers import Conv2D, MaxPooling2D
 from keras.optimizers import Adam, RMSprop
 from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
-from keras.utils import plot_model
-from keras.models import load_model
 from sklearn.model_selection import train_test_split
+from time import time
 
 df = pd.read_csv('boston.csv') #reading file
-df['sale_yr'] = pd.to_numeric(df.date.str.slice(0, 4))
-df['sale_month'] = pd.to_numeric(df.date.str.slice(4, 6))
-df['sale_day'] = pd.to_numeric(df.date.str.slice(6, 8))
-kc_data = pd.DataFrame(df, columns=[
-        'sale_yr','sale_month','sale_day',
-        'bedrooms','bathrooms','sqft_living','sqft_lot','floors',
-        'condition','grade','sqft_above','sqft_basement','yr_built',
-        'zipcode','lat','long','sqft_living15','sqft_lot15','price']) #reading input data
+boston_data = pd.DataFrame(df, columns=[
+        'CRIM','ZN','INDUS','CHAS','NOX','RM','AGE','DIS','RAD','TAX','PT','B','LSTAT','MV']) #reading input data
 label_col = 'price' #output data
-print(kc_data.describe()) #printing the description of the data
+print(boston_data.describe()) #printing the description of the data
 
 #splitting into testing and training data set
-kc_x_train, kc_x_valid, kc_y_train, kc_y_valid = train_test_split(kc_data.iloc[:,0:18], kc_data.iloc[:,18],
+boston_x_train, boston_x_valid, boston_y_train, boston_y_valid = train_test_split(boston_data.iloc[:,0:13], boston_data.iloc[:,13],
                                                     test_size=0.3, random_state=87)
 np.random.seed(155)
 #function to return maximum, minimum, mean and deviation
@@ -46,11 +38,11 @@ def z_score(col, stats):
     for c in col.columns:
         df2[c] = (col[c]-mu[c])/s[c]
     return df2
-stats = norm_stats(kc_x_train, kc_x_valid)
-arr_x_train = np.array(z_score(kc_x_train, stats))
-arr_y_train = np.array(kc_y_train)
-arr_x_valid = np.array(z_score(kc_x_valid, stats))
-arr_y_valid = np.array(kc_y_valid)
+stats = norm_stats(boston_x_train, boston_x_valid)
+arr_x_train = np.array(z_score(boston_x_train, stats))
+arr_y_train = np.array(boston_y_train)
+arr_x_valid = np.array(z_score(boston_x_valid, stats))
+arr_y_valid = np.array(boston_y_valid)
 print('Training shape:', arr_x_train.shape)
 print('ddd',arr_y_train.shape)
 print('Training samples: ', arr_x_train.shape[0])
@@ -59,27 +51,15 @@ print('Validation samples: ', arr_x_valid.shape[0])
 #function for modelling
 def basic_model_1(x_size, y_size):
     t_model = Sequential() #create model
-    t_model.add(Dense(100, activation="tanh", input_shape=(x_size,))) #input layer
+    t_model.add(Dense(100, input_shape=(x_size,), activation='relu', kernel_regularizer=None)) #input layer
     t_model.add(Dense(50, activation="relu")) #hidden layer
     t_model.add(Dense(y_size)) #output layer
     print(t_model.summary()) 
     t_model.compile(loss='mean_squared_error', 
-        optimizer=RMSprop(),
+        optimizer=RMSprop(lr=0.001),
         metrics=[metrics.mae]) #compile model
     return(t_model)
-#function for modelling with more layer
-def basic_model_2(x_size, y_size):
-    t_model = Sequential() #create model
-    t_model.add(Dense(100, activation="tanh", input_shape=(x_size,))) #input layer
-    t_model.add(Dropout(0.1)) #adding dropout
-    t_model.add(Dense(50, activation="relu")) #hidden layer
-    t_model.add(Dense(20, activation="relu")) #hidden layer
-    t_model.add(Dense(y_size)) #output layer
-    print(t_model.summary())
-    t_model.compile(loss='mean_squared_error',
-        optimizer=Adam(),
-        metrics=[metrics.mae]) #compile model
-    return(t_model)
+    
 #function for plotting the loss
 def plot_history(history):
     loss_list = [s for s in history.history.keys() if 'loss' in s and 'val' not in s]
@@ -90,7 +70,6 @@ def plot_history(history):
         return 
     ## As loss always exists
     epochs = range(1,len(history.history[loss_list[0]]) + 1)
-    
     ## Loss
     plt.figure(1)
     for l in loss_list:
@@ -105,14 +84,17 @@ def plot_history(history):
     
 model = basic_model_1(arr_x_train.shape[1], 1) #declaring model
 model.summary()
-epochs = 200
-batch_size =128
+epochs = 200 #declaring epochs
+batch_size =256 #declaring batch size
+tensorboard=TensorBoard(log_dir="logs/{}".format(time())) #tensorboard declaration to visualize plot
 history = model.fit(arr_x_train, arr_y_train, #model fitting
     batch_size=batch_size,
     epochs=epochs,
     shuffle=True,
-    verbose=2, # Change it to 2, if wished to observe execution
-    validation_data=(arr_x_valid, arr_y_valid),)
+    verbose=0, # Change it to 2, if wished to observe execution
+    validation_data=(arr_x_valid, arr_y_valid),
+    callbacks=[tensorboard])
+
 train_score = model.evaluate(arr_x_train, arr_y_train, verbose=0) #evaluating model for training
 valid_score = model.evaluate(arr_x_valid, arr_y_valid, verbose=0) #evaluating model for testing
 
