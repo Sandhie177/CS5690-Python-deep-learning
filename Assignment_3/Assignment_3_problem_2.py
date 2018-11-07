@@ -1,3 +1,9 @@
+#Implement Logistic Regression with any data set of your choice.
+#a.   Show the graph in TensorBoard.
+#b.   Show the Loss in TensorBoard.
+#c.   Use score = model.evaluate (x_text,y_test) and then print (‘test accuracy’, score[1]) to print the accuracy.
+#d.   Change three hyperparameter and report how the accuracy changes.
+
 from __future__ import print_function
 import numpy as np
 import pandas as pd

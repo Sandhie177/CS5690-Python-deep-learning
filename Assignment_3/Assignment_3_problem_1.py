@@ -1,3 +1,7 @@
+#Implement the Linear Regression with any data set of your choice except the datasets being discussed in the class.
+#a.	Show the graph in TensorBoard
+#b.	Plot the loss and then change the below parameter and report your view how the result changes in each case 
+#1.	Learning rate 2.	Batch size.	3.Optimizer 4.	Activation function
 #importing libraries
 from __future__ import print_function
 import numpy as np
@@ -51,7 +55,7 @@ print('Validation samples: ', arr_x_valid.shape[0])
 #function for modelling
 def basic_model_1(x_size, y_size):
     t_model = Sequential() #create model
-    t_model.add(Dense(100, input_shape=(x_size,), activation='relu', kernel_regularizer=None)) #input layer
+    t_model.add(Dense(100, input_shape=(x_size,), activation='tanh', kernel_regularizer=None)) #input layer
     t_model.add(Dense(50, activation="relu")) #hidden layer
     t_model.add(Dense(y_size)) #output layer
     print(t_model.summary()) 
@@ -85,7 +89,7 @@ def plot_history(history):
 model = basic_model_1(arr_x_train.shape[1], 1) #declaring model
 model.summary()
 epochs = 200 #declaring epochs
-batch_size =256 #declaring batch size
+batch_size =128 #declaring batch size
 tensorboard=TensorBoard(log_dir="logs/{}".format(time())) #tensorboard declaration to visualize plot
 history = model.fit(arr_x_train, arr_y_train, #model fitting
     batch_size=batch_size,
