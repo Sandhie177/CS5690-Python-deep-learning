@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Activation, Dense, Embedding, LSTM
+from keras.layers import Activation, Dense, Embedding, SimpleRNN
 from keras import backend as K
 from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
 #from keras_tqdm import TQDMNotebookCallback
@@ -48,7 +48,7 @@ rnn_model.add(Embedding(num_words,
                         8,
                         input_length=max_review_length))
 
-rnn_model.add(LSTM(32))
+rnn_model.add(SimpleRNN(32))
 rnn_model.add(Dense(1))
 rnn_model.add(Activation('sigmoid'))
 rnn_model.summary()
