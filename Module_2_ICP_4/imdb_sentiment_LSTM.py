@@ -33,9 +33,7 @@ X = pad_sequences(sequences,
                   truncating=pad)
 #splitting testing and training data
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X,
-                                                    y,
-                                                    test_size = 0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
 input_shape = X_train.shape
 K.clear_session()
 
