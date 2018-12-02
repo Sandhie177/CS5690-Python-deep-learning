@@ -1,5 +1,5 @@
-#Assignment 4 Problem 2(LSTM): Implement the text classification with LSTM model, with a new dataset which is not used in the class
-
+#Assignment 4 Problem 2(LSTM): Implement the text classification with LSTM model, 
+#with a new dataset which is not used in the class
 #Importing libraries
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
@@ -22,7 +22,6 @@ data = tweets[['text','airline_sentiment']]
 data = data[data.airline_sentiment != "neutral"]
 data['text'] = data['text'].apply(lambda x: x.lower())
 data['text'] = data['text'].apply((lambda x: re.sub('[^a-zA-z0-9\s]','',x)))
-
 max_fatures = 2000
 tokenizer = Tokenizer(num_words=max_fatures, split=' ')
 tokenizer.fit_on_texts(data['text'].values) #tokenizing
@@ -38,7 +37,6 @@ model.add(LSTM(lstm_out, dropout=0.2, recurrent_dropout=0.2))
 model.add(Dense(2,activation='softmax'))
 model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['accuracy']) #compiling model
 print(model.summary())
-
 Y = pd.get_dummies(data['airline_sentiment']).values
 #splitting testing and training data
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.33, random_state = 42)
